@@ -106,6 +106,9 @@ class Triangle(object):
         self.b=b
         self.c=c
         self.area_history = [self.area()]
+        self.a = Point(self.a.x,self.a.y)
+        self.b = Point(self.b.x,self.b.y)
+        self.c = Point(self.c.x,self.c.y)
 
         """
         What comes in:
