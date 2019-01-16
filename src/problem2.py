@@ -3,8 +3,8 @@ Exam 2, problem 2.
 
 Authors: David Mutchler, Vibha Alangar, Matt Boutell, Dave Fisher,
          Mark Hays, Amanda Stouder, Aaron Wilkin, their colleagues,
-         and PUT_YOUR_NAME_HERE.
-"""  # TODO: 1. PUT YOUR NAME IN THE ABOVE LINE.
+         and Jiadi Wang.
+"""  # DONE: 1. PUT YOUR NAME IN THE ABOVE LINE.
 
 import math
 import time
@@ -13,7 +13,7 @@ import testing_helper
 
 
 ###############################################################################
-# TODO: 2.  READ the   Point   class defined below.
+# DONE: 2.  READ the   Point   class defined below.
 #  Note especially its methods:
 #    clone
 #    distance_from
@@ -87,12 +87,12 @@ def main():
     print('Un-comment the calls in MAIN one by one')
     print(' to run the testing code as you complete the TODOs.')
 
-    # run_test_init()
-    # run_test_area()
-    # run_test_bigger_triangle()
-    # run_test_shrink_or_expand()
-    # run_test_return_doubled_triangle()
-    # run_test_get_largest_area()
+    run_test_init()
+    run_test_area()
+    run_test_bigger_triangle()
+    run_test_shrink_or_expand()
+    run_test_return_doubled_triangle()
+    run_test_get_largest_area()
 
 
 ###############################################################################
@@ -102,6 +102,11 @@ class Triangle(object):
     """ Represents a triangle in 2-dimensional space. """
 
     def __init__(self, a, b, c):
+        self.a=a
+        self.b=b
+        self.c=c
+        self.area_history = [self.area()]
+
         """
         What comes in:
           -- self and three Point objects
@@ -138,7 +143,7 @@ class Triangle(object):
           :type c: Point
         """
         # ---------------------------------------------------------------------
-        # TODO: 2.
+        # DONE: 2.
         #   a. READ the above specification, including the Example.
         #        ** ASK QUESTIONS AS NEEDED. **
         #        ** Be sure you understand it, ESPECIALLY the Example.
@@ -148,6 +153,13 @@ class Triangle(object):
         # ---------------------------------------------------------------------
 
     def area(self):
+        A = math.sqrt((self.b.x-self.c.x)**2+(self.b.y-self.c.y)**2)
+        B = math.sqrt((self.a.x-self.c.x)**2+(self.a.y-self.c.y)**2)
+        C = math.sqrt((self.b.x-self.a.x)**2+(self.b.y-self.a.y)**2)
+        S = 0.5 * (A+B+C)
+        area = math.sqrt(S *(S-A) * (S-B) * (S-C))
+        return area
+
         """
         What comes in:
           -- self
@@ -178,7 +190,7 @@ class Triangle(object):
           :rtype: float
         """
         # ---------------------------------------------------------------------
-        # TODO: 3.
+        # DONE: 3.
         #   a. READ the above specification, including the Example AND HINT!
         #        ** ASK QUESTIONS AS NEEDED. **
         #        ** Be sure you understand it, ESPECIALLY the Example.
@@ -188,6 +200,10 @@ class Triangle(object):
         # ---------------------------------------------------------------------
 
     def bigger_triangle(self, triangle2):
+        if self.area()>triangle2.area():
+            return True
+        else:
+            return False
         """
         What comes in:
           -- self
@@ -201,7 +217,7 @@ class Triangle(object):
           :rtype: bool
         """
         # ---------------------------------------------------------------------
-        # TODO 4:
+        # DONE 4:
         #   a. READ the above specification, including the Example.
         #        ** ASK QUESTIONS AS NEEDED. **
         #        ** Be sure you understand it, ESPECIALLY the Example.
@@ -211,6 +227,14 @@ class Triangle(object):
         # ---------------------------------------------------------------------
 
     def shrink_or_expand(self, f):
+
+        self.a.x = self.a.x * f
+        self.a.y = self.a.y * f
+        self.b.x = self.b.x * f
+        self.b.y = self.b.y * f
+        self.c.x = self.c.x * f
+        self.c.y = self.c.y * f
+        self.area_history = self.area_history + [self.area()]
         """
          What comes in:
            -- self
@@ -224,7 +248,7 @@ class Triangle(object):
            :type: f: float
         """
         # ---------------------------------------------------------------------
-        # TODO 8:
+        # DONE 8:
         #   a. READ the above specification, including the Example.
         #        ** ASK QUESTIONS AS NEEDED. **
         #        ** Be sure you understand it, ESPECIALLY the Example.
@@ -234,6 +258,10 @@ class Triangle(object):
         # ---------------------------------------------------------------------
 
     def return_doubled_triangle(self):
+        self.shrink_or_expand(2)
+        return Triangle(self.a,self.b,self.c)
+
+
         """
         What comes in:
           -- self
@@ -247,7 +275,7 @@ class Triangle(object):
           :rtype: Triangle:
         """
         # -------------------------------------------------------------------------
-        # TODO: 9
+        # DONE: 9
         #   a. READ the above specification, including the Example.
         #        ** ASK QUESTIONS AS NEEDED. **
         #        ** Be sure you understand it, ESPECIALLY the Example.
@@ -257,6 +285,11 @@ class Triangle(object):
         # -------------------------------------------------------------------------
 
     def get_largest_area(self):
+        largest = 0
+        for k in range(len(self.area_history)):
+            if self.area_history[k] > largest:
+                largest = self.area_history[k]
+        return largest
         """
         What comes in:
           -- self
@@ -271,7 +304,7 @@ class Triangle(object):
           :rtype: Float:
         """
         # ---------------------------------------------------------------------
-        # TODO: 9
+        # DONE: 9
         #   a. READ the above specification, including the Example.
         #        ** ASK QUESTIONS AS NEEDED. **
         #        ** Be sure you understand it, ESPECIALLY the Example.
@@ -458,7 +491,8 @@ def run_test_return_doubled_triangle():
     print()
     print("You must write your OWN test for this method.")
     print("You will NOT be graded on the quality of your test(s).")
-
+    print()
+    print('Test 1')
     p1 = Point(30, 75)
     p2 = Point(15, 45)
     p3 = Point(30, 90)
@@ -469,6 +503,19 @@ def run_test_return_doubled_triangle():
     expected_b = Point(30, 90)
     expected_c = Point(60, 180)
     run_test_instance_variables(t2, expected_a, expected_b, expected_c)
+    print()
+    print("Test 2")
+    p1 = Point(130, 175)
+    p2 = Point(115, 415)
+    p3 = Point(310, 910)
+    t1 = Triangle(p1, p2, p3)
+    t2 = t1.return_doubled_triangle()
+
+    expected_a = Point(260, 350)
+    expected_b = Point(230, 830)
+    expected_c = Point(620, 1820)
+    run_test_instance_variables(t2, expected_a, expected_b, expected_c)
+
 
 
 def run_test_get_largest_area():
